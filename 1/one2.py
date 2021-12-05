@@ -1,4 +1,4 @@
-numbers = [int(x) for x in open('/Users/hendriksteen/Library/Mobile Documents/com~apple~CloudDocs/Programmieren/VSCode/PythonProjects/adventofcode/one/one1.txt')]
+numbers = [int(x) for x in open('1/one.txt')]
 windows = []
 for i in range(len(numbers)):
     windows.append(0)

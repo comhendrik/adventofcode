@@ -1,7 +1,7 @@
 horizontal = 0
 depth = 0
 aim = 0
-for line in open('2/two1.txt'):
+for line in open('2/two.txt'):
     line = line.split(' ')
     if line[0] == 'down':
         aim += int(line[1].strip())
