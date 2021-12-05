@@ -1,4 +1,110 @@
-myNumbers = [93,49,16,88,4,92,23,38,44,98,97,8,5,69,41,70,19,11,29,40,90,43,79,96,68,10,31,35,34,32,0,67,83,33,2,76,24,87,99,77,82,66,12,15,28,59,64,95,91,71,62,22,53,46,39,81,75,86,74,56,50,18,17,73,13,54,60,48,21,51,52,55,85,80,30,36,47,3,26,57,84,25,63,27,37,94,7,45,58,9,78,65,72,6,14,61,20,1,42,89]
+import re
 
-for line in open('4/four.txt'):
-    print(line)
+input_list = []
+
+f = open("4/four.txt", "r")
+input_list = f.read().split("\n")
+
+drawn_numbers = input_list[0].split(',')
+drawn_numbers = list(map(int, drawn_numbers))
+input_list.pop(0)
+input_list.pop(0)
+
+board_item = []
+board_list = []
+final_score = 0
+
+# create list of lists containing numbers from board rows
+def boardToIntList(board):
+    possible_list = board.copy()
+    for i in range(len(board)):
+        possible_list[i] = re.split('\s+', possible_list[i])
+        if '' in possible_list[i]:
+            possible_list[i].remove('')
+        possible_list[i] = list(map(int, possible_list[i]))
+    return possible_list
+
+def getBoardSum(board_list):
+    sum = 0
+    for i in range(len(board_list)):
+        for j in range(len(board_list[i])):
+            sum += board_list[i][j]
+    return sum
+
+# find all possible rows or columns and return them in an int list
+def convertToAllPossibleList(board):
+    possible_list = boardToIntList(board.copy())
+    
+    for i in range(len(possible_list[0])):
+        item = []
+        for j in range(len(board)):
+            num_list = re.split('\s+', board[j])
+            if '' in num_list:
+                num_list.remove('')
+            item.append(int(num_list[i]))
+        possible_list.append(item)
+    return possible_list
+
+# check through and find index and final score when board achieves bingo
+def findBoardFinalScoreIndex(drawn_numbers, possible_list, board_sum):
+    for i in range(len(drawn_numbers)):
+        has_drawn_number = False
+        for j in range(len(possible_list)):
+            drawn_value = drawn_numbers[i]
+            if drawn_value in possible_list[j]:
+                possible_list[j].remove(drawn_value)
+                if has_drawn_number == False:
+                    has_drawn_number = True
+            if not possible_list[j]:
+                board_sum -= drawn_value
+                index = i
+                score = board_sum * drawn_value
+                return index, score
+        if has_drawn_number == True:
+            board_sum -= drawn_value
+    
+for i in range(len(input_list)):
+    if input_list[i] == '' or i == len(input_list)-1:
+        board_list.append(board_item)
+        board_item = []
+    else:
+        board_item.append(input_list[i])
+
+def fastest_win_score(board_list):
+    complete_index = len(drawn_numbers)
+    final_score = None
+    for i in range(len(board_list)):
+        board_int_list = boardToIntList(board_list[i])
+        board_sum = getBoardSum(board_int_list)
+        board_item_list = convertToAllPossibleList(board_list[i])
+        index, score = findBoardFinalScoreIndex(drawn_numbers, board_item_list, board_sum)
+        if index < complete_index:
+            complete_index = index
+            final_score = score
+        if index == len(board_int_list[0]):
+            break
+    return final_score
+part1 = fastest_win_score(board_list)
+print(part1)
+
+def slowest_win_score(board_list):
+    complete_index = 0
+    final_score = None
+    for i in range(len(board_list)):
+        board_int_list = boardToIntList(board_list[i])
+        board_sum = getBoardSum(board_int_list)
+        board_item_list = convertToAllPossibleList(board_list[i])
+        index, score = findBoardFinalScoreIndex(drawn_numbers, board_item_list, board_sum)
+        if index > complete_index:
+            complete_index = index
+            final_score = score
+        if index == len(board_int_list[0]):
+            break
+    return final_score
+
+part2 = slowest_win_score(board_list)
+print(part2)
+
+
+
+
