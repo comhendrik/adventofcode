@@ -4,4 +4,3 @@ All written in Python.
 Maybe these are not the best solutions but they work!
 Disclaimer:
 I tried everything on my own but sometimes i needed some help.
-The most help comes from https://www.youtube.com/channel/UCMhk437GeN8069t7y0lJQbw
