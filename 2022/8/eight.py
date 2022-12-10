@@ -51,5 +51,42 @@ for i in range(n):
 print("Part one:")
 print(times)
 
+scenic_score = 0
 
+def get_scenic_score(i,j):
+        top_numbers = 0
+        for y in range(i-1,-1,-1):
+            top_numbers += 1
+            if grid[y][j] >= grid[i][j]:
+                break
+
+        bottom_numbers = 0
+        for y in range(i+1,m):
+            bottom_numbers += 1
+            if grid[y][j] >= grid[i][j]:
+                break
+
+
+        left_numbers = 0
+        for x in range(j-1,-1,-1):
+            left_numbers += 1
+            if grid[i][x] >= grid[i][j]:
+                break
+
+        right_numbers = 0
+        for x in range(j+1,n):
+            right_numbers += 1
+            if grid[i][x] >= grid[i][j]:
+                break
+
+        return top_numbers * bottom_numbers * left_numbers * right_numbers
+
+for i in range(n):
+    for j in range(m):
+        new_scenic_score = get_scenic_score(i,j)
+        if new_scenic_score > scenic_score:
+            scenic_score = new_scenic_score
+
+print("Part two:")
+print(scenic_score)
    
