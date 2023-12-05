@@ -7,7 +7,7 @@ import 'dart:io';
 
 void main() async {
   //part One
-  var filePath = p.join(Directory.current.path, '2023/4/four_input.txt');
+  var filePath = p.join(Directory.current.path, '2023/4/three_input.txt');
   File file = File(filePath);
   var fileContent = await file.readAsLines();
 
