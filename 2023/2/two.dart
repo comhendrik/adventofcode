@@ -42,6 +42,7 @@ void main() async {
   }
   
   //part one
+  print("part one:");
   int sum = 0;
   int sumAdder = 1;
   for(int i=0; i<games.length; i++) {
@@ -62,6 +63,30 @@ void main() async {
 
     }
     sumAdder += 1;
+  }
+  print(sum);
+
+  print("part two:");
+  Map<String, int> minPoints = {
+    'red' : 0,
+    'green' : 0,
+    'blue' : 0,
+  };
+  sum = 0;
+  for(int i=0; i<games.length; i++) {
+    minPoints = {
+      'red' : 0,
+      'green' : 0,
+      'blue' : 0,
+    };
+    for(int j=0; j<games[i].length; j++) {
+      for (String key in games[i][j].keys) {
+        if (minPoints[key]! < games[i][j][key]!) {
+          minPoints[key] = games[i][j][key]!;
+        }
+      }
+    }
+    sum += minPoints['red']! * minPoints['green']! * minPoints['blue']!;
   }
   print(sum);
 }
