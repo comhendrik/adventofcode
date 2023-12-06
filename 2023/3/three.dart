@@ -53,6 +53,7 @@ void main() async {
 
 
   //part one
+  print("part one:");
   int sum = 0;
   for ((int, List<(int, int)>) number in allNumbers) {
     bool foundNumber = false;
@@ -72,23 +73,37 @@ void main() async {
   print(sum);
 
   //part two
+  Map<String, List<int>> gears = {};
+  print("part two:");
 
-  print("part two");
-  sum = 0;
   for ((int, List<(int, int)>) number in allNumbers) {
+    int gearX = 0;
+    int gearY = 0;
     bool foundNumber = false;
     for ((int,int) coor in number.$2) {
       final checkers = generateCheckers(coor.$1, coor.$2, map[coor.$1].length - 1, map.length - 1, commands);
       for ((int, int) checker in checkers) {
-        if (map[checker.$2][checker.$1] == '*' && int.tryParse(map[checker.$2][checker.$1]) == null) {
+        if (map[checker.$2][checker.$1] == '*') {
           foundNumber = true;
+          gearX = checker.$1;
+          gearY = checker.$2;
         }
       }
 
     }
     if (foundNumber) {
-      print(number.$1);
-      sum += number.$1;
+      if (gears["$gearX$gearY"] == null) {
+        gears["$gearX$gearY"] = [number.$1];
+      } else {
+        gears["$gearX$gearY"]!.add(number.$1);
+      }
+
+    }
+  }
+  sum = 0;
+  for (String key in gears.keys) {
+    if (gears[key]!.length == 2) {
+      sum += gears[key]![0] * gears[key]![1];
     }
   }
   print(sum);
