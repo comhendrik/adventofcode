@@ -1,10 +1,6 @@
 import 'package:path/path.dart' as p;
 import 'dart:io';
 
-
-
-
-
 void main() async {
   //part One
   var filePath = p.join(Directory.current.path, '2023/4/three_input.txt');
