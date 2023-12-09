@@ -3,7 +3,7 @@ import 'dart:io';
 
 void main() async {
   //part One
-  var filePath = p.join(Directory.current.path, '2023/4/three_input.txt');
+  var filePath = p.join(Directory.current.path, '2023/4/four_input.txt');
   File file = File(filePath);
   var fileContent = await file.readAsLines();
 
@@ -30,6 +30,8 @@ void main() async {
   }
 
 
+
+  print("part one:");
   int sum = 0;
   for(int i=0; i<wNumbers.length; i++) {
     int point_value = 0;
@@ -45,4 +47,30 @@ void main() async {
     sum += point_value;
   }
   print(sum);
+
+  print("part two:");
+
+  final List<int> copies = [];
+  for(int i=0; i<wNumbers.length; i++) {
+    copies.add(1);
+  }
+  for(int i=0; i<wNumbers.length; i++) {
+
+    for(int h=0; h<copies[i]; h++) {
+      int matchingPoints = 0;
+      for(int j=0; j<wNumbers[i].length; j++) {
+        if (numbers[i].contains(wNumbers[i][j])) {
+          matchingPoints += 1;
+        }
+      }
+
+      for(int z=i+1; z<i+1+matchingPoints; z++) {
+        copies[z] += 1;
+      }
+    }
+
+
+
+  }
+  print(copies.reduce((a, b) => a + b));
 }
