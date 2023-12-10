@@ -3,17 +3,13 @@ import 'dart:io';
 
 void main() async {
   List<List<String>> map = [];
-  List<(int,int)?> borders = [];
   var filePath = p.join(Directory.current.path, '2023/10/ten_input.txt');
   File file = File(filePath);
   var fileContent = await file.readAsLines();
   for (String line in fileContent) {
     final data = line.split('');
     map.add([]);
-    borders.add(null);
     for (String char in data) {
-      if (char == 'S') {
-      }
       map.last.add(char);
     }
   }
@@ -75,7 +71,11 @@ void main() async {
   }
   print(count);
 
+
   //these startings points for searched in the file without parsing it
+
+
+  print("part two:");
   (int,int) startLine = (49,95);
   (int,int) prevStartLine = (49,96);
   (int,int) start = (49,96);
@@ -83,22 +83,10 @@ void main() async {
     start,
     startLine
   };
-  print("Part two:");
+
+
   while(true) {
     if (startLine == start) break;
-    if(borders[startLine.$1] == null) {
-      borders[startLine.$1] = (startLine.$2, startLine.$2);
-    } else {
-      int min = borders[startLine.$1]!.$2;
-      int max = borders[startLine.$1]!.$2;
-      if (min > startLine.$2) {
-        min = startLine.$2;
-      }
-      if (max < startLine.$2) {
-        max = startLine.$2;
-      }
-      borders[startLine.$1] = (min, max);
-    }
     String startingInstruction = map[startLine.$1][startLine.$2];
     final coorsStartingOptionOne = instructionsOptionOne[startingInstruction]!;
     final coorsStartingOptionTwo = instructionsOptionTwo[startingInstruction]!;
@@ -114,14 +102,18 @@ void main() async {
     points.add(startLine);
 
   }
-
+  //used point in polygon test
   count = 0;
+  Set<String> chars = { "|", "J", "L"};
   for (int i = 0; i<map.length; i++) {
     for (int j = 0; j<map[i].length; j++) {
-      if (borders[i] != null && !points.contains((i,j))) {
-        if (j > borders[i]!.$1 && j < borders[i]!.$2) {
-          count += 1;
-        }
+      if (points.contains((i,j))) continue;
+      int crossings = 0;
+      for(int z=j; z>=0; z--) {
+        if (points.contains((i,z)) && chars.contains(map[i][z])) crossings += 1;
+      }
+      if (crossings != 0 && crossings % 2 != 0) {
+        count += 1;
       }
     }
   }
