@@ -12,11 +12,28 @@ final List<String> tInput = [
 
 void main() async {
   //part One
-  var filePath = p.join(Directory.current.path, '2023/1/t_one_input.txt');
+  var filePath = p.join(Directory.current.path, '2023/1/one_input.txt');
   File file = File(filePath);
   var fileContent = await file.readAsLines();
   print("Part one:");
   int sum = 0;
+  for (String line in fileContent) {
+    String number = "";
+    for(int i=0; i<line.length; i++) {
+      if (int.tryParse(line[i]) != null) {
+        number = line[i];
+        break;
+      }
+    }
+    for(int i=line.length-1; i>-1; i--) {
+      if (int.tryParse(line[i]) != null) {
+        number = "$number${line[i]}";
+        break;
+      }
+    }
+    sum += int.parse(number);
+  }
+  print(sum);
 
   print("Part two:");
   Map<String, int> replacementStrings = {
@@ -82,12 +99,12 @@ void main() async {
       }
     });
     String firstStringNumber = "";
-    if (minValue != -1 && minValue < indexFirstNormalNumber) {
+    if ((minValue != -1 && minValue < indexFirstNormalNumber) || indexFirstNormalNumber == -1) {
       firstStringNumber = numberReplacementStrings[minKey]!;
     }
 
     String lastStringNumber = "";
-    if (maxValue != -1 && maxValue > indexFirstNormalNumber) {
+    if ((maxValue != -1 && maxValue > indexLastNormalNumber) || indexLastNormalNumber == -1) {
       lastStringNumber = numberReplacementStrings[maxKey]!;
     }
     String number = "";
@@ -101,7 +118,6 @@ void main() async {
     } else {
       number = number + lastStringNumber;
     }
-    print(number);
     sum += int.parse(number);
   }
   print(sum);
