@@ -36,17 +36,6 @@ void main() async {
   print(sum);
 
   print("Part two:");
-  Map<String, int> replacementStrings = {
-    "one" : 0,
-    "two" : 0,
-    "three" : 0,
-    "four" : 0,
-    "five" : 0,
-    "six" : 0,
-    "seven" : 0,
-    "eight" : 0,
-    "nine" : 0
-  };
   Map<String, String> numberReplacementStrings = {
     "one" : "1",
     "two" : "2",
@@ -60,65 +49,29 @@ void main() async {
   };
   sum = 0;
   for (String line in fileContent) {
-    for(String key in replacementStrings.keys) {
-      replacementStrings[key] = line.indexOf(key);
-    }
-    int indexFirstNormalNumber = -1;
-    String firstNormalNumber = "";
-    for(int i=0; i<line.length; i++) {
+    String? first = null;
+    String? last = null;
+    for (int i=0; i<line.length; i++) {
+      String curr = "";
       if (int.tryParse(line[i]) != null) {
-        indexFirstNormalNumber = i;
-        firstNormalNumber = line[i];
-        break;
+        curr = line[i];
+      } else {
+        for(String key in numberReplacementStrings.keys) {
+          if (i + key.length > line.length) continue;
+          if(line.substring(i, i + key.length) == key) {
+            curr = numberReplacementStrings[key]!;
+            break;
+          }
+        }
+      }
+      if(curr != "") {
+        if (first == null) {
+          first = curr;
+        }
+        last = curr;
       }
     }
-    int indexLastNormalNumber = -1;
-    String lastNormalNumber = "";
-    for(int i=line.length-1; i>-1; i--) {
-      if (int.tryParse(line[i]) != null) {
-        indexLastNormalNumber = i;
-        lastNormalNumber = line[i];
-        break;
-      }
-    }
-    String minKey = '';
-    int minValue = -1;
-    String maxKey = '';
-    int maxValue = -1;
-
-    replacementStrings.forEach((key, value) {
-      if ((value < minValue || minValue == -1) && value != -1) {
-        minKey = key;
-        minValue = value;
-      }
-    });
-    replacementStrings.forEach((key, value) {
-      if (value > maxValue && value != -1) {
-        maxKey = key;
-        maxValue = value;
-      }
-    });
-    String firstStringNumber = "";
-    if ((minValue != -1 && minValue < indexFirstNormalNumber) || indexFirstNormalNumber == -1) {
-      firstStringNumber = numberReplacementStrings[minKey]!;
-    }
-
-    String lastStringNumber = "";
-    if ((maxValue != -1 && maxValue > indexLastNormalNumber) || indexLastNormalNumber == -1) {
-      lastStringNumber = numberReplacementStrings[maxKey]!;
-    }
-    String number = "";
-    if (firstStringNumber == "") {
-      number = firstNormalNumber;
-    } else {
-      number = firstStringNumber;
-    }
-    if (lastStringNumber == "") {
-      number = number + lastNormalNumber;
-    } else {
-      number = number + lastStringNumber;
-    }
-    sum += int.parse(number);
+    sum += int.parse("$first$last");
   }
   print(sum);
 }
