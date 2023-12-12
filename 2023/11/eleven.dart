@@ -27,11 +27,12 @@ void main() async {
 
   print("Part one:");
   for ((int,int) galaxy in galaxies) {
-    final ans = moving((galaxy.$1, galaxy.$2), movement);
+    final ans = moving((galaxy.$1, galaxy.$2), movement, map);
   }
 
 }
 
-int moving((int, int) coors, List<(int,int)> movement) {
+int moving((int, int) coors, List<(int,int)> movement, List<List<String>> map) {
+  final ans = moving((coors.$1 + movement[0].$1, coors.$2 + movement[0].$2), movement, map);
   return 0;
 }
