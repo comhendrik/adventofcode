@@ -2,26 +2,85 @@ import 'package:path/path.dart' as p;
 import 'dart:io';
 
 void main() async {
-  List<(List<int>, List<String>)> damagedRecords = [];
+  print("Part one:");
+  List<(List<int>, String)> damagedRecords = [];
   var filePath = p.join(Directory.current.path, '2023/12/twelve_input.txt');
   File file = File(filePath);
   var fileContent = await file.readAsLines();
   for (String line in fileContent) {
     final data = line.split(' ');
-    damagedRecords.add(([], []));
-    for (String char in data[0].split('')) {
-      damagedRecords.last.$2.add(char);
-    }
+    List<int> numbers = [];
     for (String number in data[1].split(',')) {
-      damagedRecords.last.$1.add(int.parse(number));
+      numbers.add(int.parse(number));
     }
-  }
-  print(damagedRecords);
+    damagedRecords.add((numbers, data[0]));
 
-  String inputString = "???.###";
-  int n = 2;
-  List<String> options = generateOptions(inputString, n);
-  print(options);
+  }
+  int sum = 0;
+  for((List<int>, String) record in damagedRecords) {
+    int arrangements = 0;
+    final numberOfHashes = generateNumberOfHashesToBePlaced(record);
+    List<String> options = generateOptions(record.$2.toString(), numberOfHashes);
+    for (String option in options) {
+      int currentIndexOfNumber = 0;
+      bool increaseArrangements = true;
+      final data = option.split('');
+      for (int i=0; i<data.length; i++) {
+        if (currentIndexOfNumber == record.$1.length) break;
+        int current = record.$1[currentIndexOfNumber];
+        if (data[i] == '#') {
+          bool isValid = true;
+          for (int j=0; j<current; j++) {
+            if (data[i+j] != '#') isValid = false;
+          }
+          if(i+current != data.length) {
+            if (data[i+current] != '.') isValid = false;
+          }
+          if (!isValid) {
+            increaseArrangements = false;
+            break;
+          }
+          i = i + current;
+          currentIndexOfNumber += 1;
+        }
+      }
+
+      if (increaseArrangements) {
+        arrangements += 1;
+      }
+    }
+    sum += arrangements;
+  }
+  print(sum);
+
+
+  print("Part two:");
+  damagedRecords = [];
+  for (String line in fileContent) {
+    List<int> numbers = [];
+    String damagedRecordString = '';
+    for (int i=0; i<5; i++) {
+      final data = line.split(' ');
+      for (String number in data[1].split(',')) {
+        numbers.add(int.parse(number));
+      }
+      damagedRecordString = damagedRecordString + data[0];
+    }
+    damagedRecords.add((numbers, damagedRecordString));
+
+  }
+  sum = 0;
+  //TODO: Part two
+}
+
+int generateNumberOfHashesToBePlaced((List<int>, String) record) {
+  final sumOfHashes = record.$1.fold(0, (previous, current) => previous + current);
+
+  final chars = record.$2.split('');
+
+  List<String> filteredChars = chars.where((char) => char == '#').toList();
+
+  return sumOfHashes - filteredChars.length;
 }
 
 
