@@ -28,6 +28,7 @@ void main() async {
 
     bool foundVertical = false;
     while (current_column<xLen) {
+      //searching for vertical line
       bool foundVerticalLine = true;
       int current_left_column = current_column - 1;
       int current_right_column = current_column;
@@ -38,6 +39,7 @@ void main() async {
           foundVerticalLine = false;
         }
       }
+      //validating that vertical line is the correct one;
       if(foundVerticalLine) {
         int curr_left = current_left_column - 1;
         int curr_right = current_right_column + 1;
@@ -59,7 +61,7 @@ void main() async {
           }
         }
         if (stillMirrored) {
-          sum += (current_left_column + 1);
+
           foundVertical = true;
           break;
         }
@@ -69,8 +71,8 @@ void main() async {
     if (!foundVertical) {
       //horizontal checking
       int current_row = 1;
-      bool foundHorizontal = false;
       while (current_row<yLen) {
+        //finding horizontal line
         bool foundHorizontalLine = true;
         int current_top_row = current_row - 1;
         int current_bottom_row = current_row;
@@ -83,6 +85,7 @@ void main() async {
           }
         }
         if(foundHorizontalLine) {
+          //validating that it is the right line
           int curr_top = current_top_row - 1;
           int curr_bottom = current_bottom_row + 1;
           bool stop = false;
@@ -104,7 +107,6 @@ void main() async {
           }
           if (stillMirrored) {
             sum += (current_top_row + 1) * 100;
-            foundHorizontal = true;
             break;
           }
         }
