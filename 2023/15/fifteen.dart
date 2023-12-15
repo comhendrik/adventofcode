@@ -52,7 +52,7 @@ void main() async {
   //compute focusing power
   int focusingPower = 0;
   for (int i=0; i<boxes.length; i++) {
-    focusingPower += computeFocusingPower(boxes[0], i+1);
+    focusingPower += computeFocusingPower(boxes[i], i+1);
   }
   print(focusingPower);
 }
@@ -71,7 +71,7 @@ int computeFocusingPower(List<(String, int)> box, int box_number) {
   int boxFocusingPower = 0;
   if(box.isEmpty) return 0;
   for(int i=0; i<box.length; i++) {
-
+    boxFocusingPower += (box_number * (i+1) * box[i].$2);
   }
-  return 0;
+  return boxFocusingPower;
 }
