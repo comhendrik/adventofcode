@@ -42,6 +42,55 @@ void main() async {
     countVisited.add(visit.$1);
   }
   print(countVisited.length);
+
+  print("Part two:");
+  //first one is the current coordination of beam, second is the current movement direction
+  List<((int, int), (int, int))> startingBeams = [
+    ((0,0),(0,1)),
+    ((0,0),(1,0)),
+
+    ((0, map.first.length-1),(0,-1)),
+    ((0, map.first.length-1),(1,0)),
+
+    ((map.length-1,0),(0,1)),
+    ((map.length-1,0),(-1,0)),
+
+    ((map.length-1,map.first.length-1),(0,-1)),
+    ((map.length-1,map.first.length-1),(-1,0)),
+  ];
+  int max = 0;
+  for (((int,int),(int,int)) currentBeam in startingBeams) {
+
+    beams = [currentBeam];
+    //Set to check which points of the map where visited;
+    visited = {};
+    while (!beams.isEmpty) {
+      final beam = beams.first;
+      beams.removeAt(0);
+      (int, int) newCoors = (beam.$1.$1 + beam.$2.$1, beam.$1.$2 + beam.$2.$2);
+      if(newCoors.$1 < 0 || newCoors.$2 < 0) continue;
+      if(newCoors.$1 >= map.length || newCoors.$2 >= map.first.length) continue;
+      ((int, int),(int, int)?) newDirection = checkNewDirection(beam.$2, map[newCoors.$1][newCoors.$2]);
+      if (!visited.contains((newCoors, newDirection.$1))) {
+        visited.add((newCoors, newDirection.$1));
+        beams.add((newCoors, newDirection.$1));
+      }
+      if (newDirection.$2 != null) {
+        if (!visited.contains((newCoors, newDirection.$2!))) {
+          visited.add((newCoors, newDirection.$2!));
+          beams.add((newCoors, newDirection.$2!));
+        }
+      }
+    }
+
+    countVisited = {};
+    for (((int, int), (int, int)) visit in visited) {
+      countVisited.add(visit.$1);
+    }
+    if (max < countVisited.length) max = countVisited.length;
+  }
+  print(max);
+
 }
 
 ((int, int), (int, int)?) checkNewDirection((int,int) currentDirection, String char) {
