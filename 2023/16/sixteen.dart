@@ -15,27 +15,33 @@ void main() async {
   }
   print("Part one:");
   //first one is the current coordination of beam, second is the current movement direction
-  List<((int, int), (int, int))> beams = [((0,0),(0,1))];
-  //second list to add new beams to list and the copy them to the next List
-  List<((int, int), (int, int))> newBeams = [];
+  List<((int, int), (int, int))> beams = [((0,-1),(0,1))];
   //Set to check which points of the map where visited;
-  Set<(int,int)> visited = {(0,0)};
-  int sum = 0;
+  Set<((int, int), (int, int))> visited = {};
   while (!beams.isEmpty) {
-    for (((int, int), (int, int)) beam in beams) {
-      (int, int) newCoors = (beam.$1.$1 + beam.$2.$1, beam.$1.$2 + beam.$2.$2);
-      if(newCoors.$1 < 0 || newCoors.$2 < 0) continue;
-      if(newCoors.$1 >= map.length || newCoors.$2 >= map.first.length) continue;
-      ((int, int),(int, int)?) newDirection = checkNewDirection(beam.$2, map[newCoors.$1][newCoors.$2]);
-      newBeams.add((newCoors, newDirection.$1));
-      if (newDirection.$2 != null) newBeams.add((newCoors, newDirection.$2!));
-      visited.add(newCoors);
+    final beam = beams.first;
+    beams.removeAt(0);
+    (int, int) newCoors = (beam.$1.$1 + beam.$2.$1, beam.$1.$2 + beam.$2.$2);
+    if(newCoors.$1 < 0 || newCoors.$2 < 0) continue;
+    if(newCoors.$1 >= map.length || newCoors.$2 >= map.first.length) continue;
+    ((int, int),(int, int)?) newDirection = checkNewDirection(beam.$2, map[newCoors.$1][newCoors.$2]);
+    if (!visited.contains((newCoors, newDirection.$1))) {
+      visited.add((newCoors, newDirection.$1));
+      beams.add((newCoors, newDirection.$1));
     }
-    beams = newBeams;
-    print(newBeams.length);
-    newBeams = [];
-    sum += 1;
+    if (newDirection.$2 != null) {
+      if (!visited.contains((newCoors, newDirection.$2!))) {
+        visited.add((newCoors, newDirection.$2!));
+        beams.add((newCoors, newDirection.$2!));
+      }
+    }
   }
+
+  Set<(int, int)> countVisited = {};
+  for (((int, int), (int, int)) visit in visited) {
+    countVisited.add(visit.$1);
+  }
+  print(countVisited.length);
 }
 
 ((int, int), (int, int)?) checkNewDirection((int,int) currentDirection, String char) {
