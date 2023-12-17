@@ -47,17 +47,25 @@ void main() async {
   //first one is the current coordination of beam, second is the current movement direction
   List<((int, int), (int, int))> startingBeams = [
     ((0,0),(0,1)),
-    ((0,0),(1,0)),
-
     ((0, map.first.length-1),(0,-1)),
-    ((0, map.first.length-1),(1,0)),
-
     ((map.length-1,0),(0,1)),
-    ((map.length-1,0),(-1,0)),
-
-    ((map.length-1,map.first.length-1),(0,-1)),
     ((map.length-1,map.first.length-1),(-1,0)),
   ];
+
+  //Adding to starting beams, you need to add every of the outer map, starting beams already contains some, because
+  //the edge tiles can move in two directions. But this for loops only get the edge tiles in the normal direction
+  int maxY = map.length - 1;
+  int maxX = map.first.length - 1;
+  for (int i=0; i<map.length; i++) {
+    startingBeams.add(((0,i), (1,0)));
+    startingBeams.add(((maxY,i), (-1,0)));
+  }
+  //adding second option for corner
+
+  for (int i=0; i<map.first.length; i++) {
+    startingBeams.add(((i,0), (0,1)));
+    startingBeams.add(((i,maxX), (0,-1)));
+  }
   int max = 0;
   for (((int,int),(int,int)) currentBeam in startingBeams) {
 
