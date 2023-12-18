@@ -45,7 +45,7 @@ void main() async {
   map = start_map;
   Map<String, int> seen = {};
   sum = 0;
-  for (int count=0; count < 1000000000; count++) {
+  for (int count = 0; count < 1000000000; count++) {
     //tilting to north
     for(int i=0; i<map.length; i++) {
       for(int j=0; j<map[i].length; j++) {
@@ -87,22 +87,69 @@ void main() async {
       }
     }
     if (seen.containsKey(getHashOfMap(map))) {
-      print(count);
-      //TODO: finish this day
+
+      //find how long a cycle is until the same state appears again
+      final lengthOfCycle = count - seen[getHashOfMap(map)]!;
+      //found out how many cycles fit in the range of the number of the first cycle and 1000000000
+      //-1 is done because of 0 based counting
+      int restOfCycle = (1000000000 - 1 - seen[getHashOfMap(map)]!) % lengthOfCycle;
+      for (int rest=0; rest < restOfCycle; rest++) {
+        //Maybe add a function for cycling
+        //tilting to north
+        for(int i=0; i<map.length; i++) {
+          for(int j=0; j<map[i].length; j++) {
+            if (map[i][j] == 'O') {
+              map[i][j] = '.';
+              final newCoords = generateNewCoordsForRock(-1, false, i, j, map);
+              map[newCoords.$1][newCoords.$2] = 'O';
+            }
+          }
+        }
+        //tilting to west
+        for(int i=0; i<map.length; i++) {
+          for(int j=0; j<map[i].length; j++) {
+            if (map[i][j] == 'O') {
+              map[i][j] = '.';
+              final newCoords = generateNewCoordsForRock(-1, true, i, j, map);
+              map[newCoords.$1][newCoords.$2] = 'O';
+            }
+          }
+        }
+        //tilting to south
+        for(int i=map.length-1; i>=0; i--) {
+          for(int j=map[i].length-1; j>=0; j--) {
+            if (map[i][j] == 'O') {
+              map[i][j] = '.';
+              final newCoords = generateNewCoordsForRock(1, false, i, j, map);
+              map[newCoords.$1][newCoords.$2] = 'O';
+            }
+          }
+        }
+        //tilting to east
+        for(int i=map.length-1; i>=0; i--) {
+          for(int j=map[i].length-1; j>=0; j--) {
+            if (map[i][j] == 'O') {
+              map[i][j] = '.';
+              final newCoords = generateNewCoordsForRock(1, true, i, j, map);
+              map[newCoords.$1][newCoords.$2] = 'O';
+            }
+          }
+        }
+      }
+      //computing load
+      sum = 0;
+      for(int i=0; i<map.length; i++) {
+        for(int j=0; j<map[i].length; j++) {
+          if (map[i][j] == 'O') {
+            sum += map.length - i;
+          }
+        }
+      }
+      print(sum);
       break;
     }
     seen[getHashOfMap(map)] = count;
   }
-  //computing load
-  sum = 0;
-  for(int i=0; i<map.length; i++) {
-    for(int j=0; j<map[i].length; j++) {
-      if (map[i][j] == 'O') {
-        sum += map.length - i;
-      }
-    }
-  }
-  print(sum);
 }
 
 (int, int) generateNewCoordsForRock(int direction, bool horizontal, int y, int x, List<List<String>> map) {
