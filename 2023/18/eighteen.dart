@@ -49,6 +49,34 @@ void main() async {
   }
 
 
+  for (List<String> line in map){
+    print(line);
+  }
+  //add method to get edgepoints
+
+  List<(int,int)> edgePoints = [(2,0), (0,0), (0,6), (5,6), (5,4), (7,4), (7,6), (9,6), (9,1), (7,1), (7,0), (5,0), (5,2), (2,2), (2,0), (0,0)];
+
+  double area = 0;
+  //calculating area by using shoelace formula and picks theorem
+  for(int i=1; i<edgePoints.length-1; i++) {
+    final x = edgePoints[i].$2;
+    final y = edgePoints[i].$1;
+    final prevX = edgePoints[i-1].$2;
+    final prevY = edgePoints[i-1].$1;
+    final laterX = edgePoints[i+1].$2;
+    final laterY = edgePoints[i+1].$1;
+    area += (y + laterY) * (x-laterX);
+  }
+
+  if (area < 0) area * -1;
+  area = area / 2;
+  print(area);
+  //starting of picks theorem
+  int b = coordinates.length - 1;
+  double i = area - (b / 2) + 1;
+  // b are interior points and i outside of the polygon
+  print(i+b);
+  return;
 
   List<(int,int)> coordinatesToAdd = [];
 
