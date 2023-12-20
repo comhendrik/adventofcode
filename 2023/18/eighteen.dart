@@ -19,7 +19,11 @@ void main() async {
     'R' : (0,1)
   };
 
+  print("Part one:");
+
   (int, int) currentCoordinates = (0,0);
+
+
   for ((String, int, String) direction in directions) {
     (int, int) movingCoors = allMovingCoors[direction.$1]!;
     for (int i=0; i<direction.$2; i++) {
@@ -56,8 +60,6 @@ void main() async {
   for(int i=1; i<edgePoints.length-1; i++) {
     final x = edgePoints[i].$2;
     final y = edgePoints[i].$1;
-    final prevX = edgePoints[i-1].$2;
-    final prevY = edgePoints[i-1].$1;
     final laterX = edgePoints[i+1].$2;
     final laterY = edgePoints[i+1].$1;
     area += (y + laterY) * (x-laterX);
@@ -70,7 +72,60 @@ void main() async {
   double i = area - (b / 2) + 1;
   // b are interior points and i outside of the polygon
   print(i+b);
-  return;
+
+  print("Part two");
+
+  currentCoordinates = (0,0);
+
+
+  Map<String, String> convertNumberToDirection = {
+    '0' : 'R',
+    '1' : 'D',
+    '2' : 'L',
+    '3' : 'U'
+  };
+
+
+  //new approach for getting edge points, because old approach is too slow for it
+
+  List<(int,int)> edgePointsP2 = [(0,0)];
+
+
+  b = 0;
+
+  for ((String, int, String) direction in directions) {
+    String code = direction.$3.substring(1, direction.$3.length-1);
+    final realDirection = code[code.length-1];
+    final distance = code.substring(1,code.length-1);
+    final realDistance = int.parse(distance, radix: 16);
+    (int, int) movingCoors = allMovingCoors[convertNumberToDirection[realDirection]!]!;
+    b += realDistance;
+    (int, int) newCoors = (currentCoordinates.$1 + (movingCoors.$1 * realDistance), currentCoordinates.$2 + (movingCoors.$2 * realDistance));
+    edgePointsP2.add(newCoors);
+    currentCoordinates = newCoors;
+  }
+
+  edgePointsP2.insert(0, edgePointsP2[edgePointsP2.length - 2]);
+
+  area = 0;
+  //calculating area by using shoelace formula and picks theorem
+  for(int i=1; i<edgePointsP2.length-1; i++) {
+    final x = edgePointsP2[i].$2;
+    final y = edgePointsP2[i].$1;
+    final laterX = edgePointsP2[i+1].$2;
+    final laterY = edgePointsP2[i+1].$1;
+    area += (y + laterY) * (x-laterX);
+  }
+
+  if (area < 0) area * -1;
+  area = area / 2;
+  //starting of picks theorem
+  i = area - (b / 2) + 1;
+  // b are interior points and i outside of the polygon
+  print(i+b);
+
+
+
 }
 
 List<(int,int)> getCornerPoints(List<List<String>> polygon, List<(int,int)> coordinates, int addingY, int addingX) {
