@@ -16,11 +16,11 @@ void main() async {
     }
   }
   // Creating a priority queue with a custom comparator
-  PriorityQueue<(int,(int,int),(int,int),int,Set<(int,int)>, int)> priorityQueue =
-  PriorityQueue<(int,(int,int),(int,int),int,Set<(int,int)>, int)>((a, b) => a.$1.compareTo(b.$1) && a.$5.compareTo(b.$5));
+  PriorityQueue<(int,int,int,int,int,int)> priorityQueue =
+  PriorityQueue<(int,int,int,int,int,int)>((a, b) => a.$1.compareTo(b.$1));
 
   // Adding elements to the priority queue
-  priorityQueue.add((0,(0,0),(0,0),0,{}));
+  priorityQueue.add((0,0,0,0,0,0));
 
   // Printing the elements in descending order (custom priority order)
   List<(int,int)> movements = [
@@ -31,44 +31,50 @@ void main() async {
   ];
 
 
+  Set<(int,int,int,int,int,int)> seen = {};
+
   final maxY = map.length - 1;
   final maxX = map.first.length - 1;
 
   while (priorityQueue.isNotEmpty) {
-    bool foundEnd = false;
-    (int,(int,int),(int,int),int, Set<(int,int)>) block = priorityQueue.removeFirst();
-    print(block);
-    final value = block.$1;
-    final currentCoors = block.$2;
-    final currentMovement = block.$3;
-    final numberOfSteps = block.$4;
-    Set<(int,int)> seen = block.$5;
-    if (seen.contains(currentCoors)) continue;
-    for((int,int) move in movements) {
-      final y = currentCoors.$1 + move.$1;
-      final x = currentCoors.$2 + move.$2;
 
-      //TODO Error handling when out of bounds
+    (int,int,int,int,int,int) block = priorityQueue.removeFirst();
+    final heatLoss = block.$1;
+    final y = block.$2;
+    final x = block.$3;
+    final moveY = block.$4;
+    final moveX = block.$5;
+    final steps = block.$6;
 
-      if (y < 0 || y > maxY) continue;
-      if (x < 0 || x > maxX) continue;
-      final newHeatLoss = value + map[y][x];
-      if(y==maxY && x == maxX) {
-        foundEnd = true;
-        print(newHeatLoss);
-        break;
-      }
 
-      seen.add(currentCoors);
-      if (move == currentMovement) {
-        if (numberOfSteps == 3) continue;
-        priorityQueue.add((newHeatLoss,(y,x),move, numberOfSteps + 1, seen));
-        continue;
-      }
-      priorityQueue.add((newHeatLoss, (y,x) ,move, 1, seen));
+    if (y == maxY && x == maxX) {
+      print(heatLoss);
+      break;
     }
 
-    seen.add(currentCoors);
-    if (foundEnd) break;
+    if (seen.contains(block)) continue;
+
+    seen.add(block);
+
+    //movement in same direction
+    if (steps < 3 && (moveY,moveX) != (0,0)) {
+      final newY = y + moveY;
+      final newX = x + moveX;
+      if ((newX >= 0 && newX <= maxX) && (newY >= 0 && newY <= maxY)) {
+        priorityQueue.add((heatLoss+map[newY][newX], newY, newX, moveY, moveX, steps+1));
+      }
+    }
+
+    //movement for all different directions
+    for((int,int) move in movements) {
+      //except the same direction and opposite direction
+      if (move != (moveY,moveX) && move != (-moveY, -moveX)) {
+        final newY = y + move.$1;
+        final newX = x + move.$2;
+        if ((newX >= 0 && newX <= maxX) && (newY >= 0 && newY <= maxY)) {
+          priorityQueue.add((heatLoss+map[newY][newX], newY, newX, move.$1, move.$2, 1));
+        }
+      }
+    }
   }
 }
