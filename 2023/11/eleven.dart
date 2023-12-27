@@ -42,9 +42,9 @@ void main() async {
 
   Set<((int,int),(int,int))> seen = {};
 
-  print("Part one");
+  print("Part one/two  /var stepsToAdd needs to be 1 for part one and 1000000-1 for part two:");
   int sum = 0;
-  final stepsToAdd = 1;
+  final stepsToAdd = 1000000-1;
   //do it for every pair
   for(int i=0; i<galaxies.length; i++) {
     for (int j=0; j<galaxies.length; j++) {
