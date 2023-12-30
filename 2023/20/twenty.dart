@@ -98,7 +98,7 @@ void main() async {
     if (data[0].contains('&')) {
       List<String> ascended = data[1].split(', ');
       final name = data[0].substring(1,data[0].length);
-      map[name] = ConjunctionModule(ascended, {'c':false});
+      map[name] = ConjunctionModule(ascended, {});
       //conjunction module
     } else if (data[0].contains('%')) {
       //flip flop module
@@ -108,77 +108,47 @@ void main() async {
       map[name] = FlipFlopModule(ascended);
     } else {
       List<String> ascended = data[1].split(', ');
-      print(ascended.length);
       map['broadcaster'] = BroadcastModule(ascended);
     }
   }
 
-  //TODO: Load something for a conjunction module
+  for (String line in fileContent) {
+    final data = line.split(' -> ');
+    List<String> ascended = data[1].split(', ');
+    final name = data[0].substring(1,data[0].length);
+    for(String module in ascended) {
+      if (map[module] == null) continue;
+      if (map[module]!.runtimeType == ConjunctionModule) {
+        map[module]!.states[name] = false;
+      }
+    }
+  }
 
-
-
-  Map<String,Module> _fasdf = {
-    'broadcaster' : BroadcastModule(['a','b','c']),
-    'a' : FlipFlopModule(['b']),
-    'b' : FlipFlopModule(['c']),
-    'c' : FlipFlopModule(['inv']),
-    'inv' : ConjunctionModule(['a'], {'c':false}),
-  };
-
-  Map<String,Module> _ = {
-    'broadcaster' : BroadcastModule(['a']),
-    'a' : FlipFlopModule(['inv','con']),
-    'inv' : ConjunctionModule(['b'],{'a':false}),
-    'b' : FlipFlopModule(['con']),
-    'con' : ConjunctionModule(['output'],{'a':false,'b':false}),
-  };
-  int i = 0;
   int countHighPulse = 0;
   int countLowPulse = 0;
-  while(true) {
-    i += 1;
+  for(int i=0;i<1000;i++) {
     countLowPulse += 1;
     List<(String,bool,String)> inputList = [('broadcaster',false,'button')];
     while (!inputList.isEmpty) {
       (String,bool,String) currInput = inputList.first;
       inputList.removeAt(0);
       if (!map.containsKey(currInput.$1)) {
-        print(currInput.$2);
         continue;
       }
       Module currComponent = map[currInput.$1]!;
       bool? pulse = currComponent.computeInput(currInput.$2,currInput.$3);
       if (pulse == null) continue;
       for (String componentName in currComponent.names) {
-        print("${currInput.$1} --> $pulse, $componentName,");
         if (pulse) countHighPulse += 1;
         else countLowPulse += 1;
         inputList.add((componentName,pulse,currInput.$1));
       }
     }
-    print("________");
-    bool isNotInitState = false;
-    for (String key in map.keys) {
-      Map<String,bool> states = map[key]!.states;
-      print(states);
-      for (bool value in states.values) {
-        isNotInitState = value;
-        if (value == true) break;
-      }
-      if(isNotInitState) break;
-    }
-    if (!isNotInitState) {
-      print(i);
-      break;
-    }
   }
 
-  final multiplicationValue = 1000 / i;
-  final finalCountLowPulse = countLowPulse * multiplicationValue;
-  final finalCountHighPulse = countHighPulse * multiplicationValue;
-  print(finalCountLowPulse);
-  print(finalCountHighPulse);
-  print("Part one: ${finalCountHighPulse * finalCountLowPulse}");
+  print(countLowPulse);
+  print(countHighPulse);
+  print("Part one: ${countLowPulse * countHighPulse}");
 }
 
 
