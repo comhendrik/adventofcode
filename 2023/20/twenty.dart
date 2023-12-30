@@ -87,7 +87,7 @@ class BroadcastModule implements Module {
 
 void main() {
 
-  Map<String,Module> maptest1 = {
+  Map<String,Module> _ = {
     'broadcaster' : BroadcastModule(['a','b','c']),
     'a' : FlipFlopModule(['b']),
     'b' : FlipFlopModule(['c']),
@@ -105,8 +105,11 @@ void main() {
 
 
   int i = 0;
+  int countHighPulse = 0;
+  int countLowPulse = 0;
   while(true) {
     i += 1;
+    countLowPulse += 1;
     List<(String,bool,String)> inputList = [('broadcaster',false,'button')];
     while (!inputList.isEmpty) {
       (String,bool,String) currInput = inputList.first;
@@ -119,7 +122,9 @@ void main() {
       bool? pulse = currComponent.computeInput(currInput.$2,currInput.$3);
       if (pulse == null) continue;
       for (String componentName in currComponent.names) {
-        print("${currInput.$1} -->$pulse, $componentName,");
+        print("${currInput.$1} --> $pulse, $componentName,");
+        if (pulse) countHighPulse += 1;
+        else countLowPulse += 1;
         inputList.add((componentName,pulse,currInput.$1));
       }
     }
@@ -139,6 +144,13 @@ void main() {
       break;
     }
   }
+
+  final multiplicationValue = 1000 / i;
+  final finalCountLowPulse = countLowPulse * multiplicationValue;
+  final finalCountHighPulse = countHighPulse * multiplicationValue;
+  print(finalCountLowPulse);
+  print(finalCountHighPulse);
+  print("Part one: ${finalCountHighPulse * finalCountLowPulse}");
 }
 
 
