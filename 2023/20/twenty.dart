@@ -35,10 +35,10 @@ class ConjunctionModule implements Module{
   Map<String,bool> _states;
 
   // Updated constructor with field initialization
-  ConjunctionModule(List<String> names)
+  ConjunctionModule(List<String> names, Map<String,bool> _states)
       : _state = false,
         _names = names,
-        _states = {};
+        _states = _states;
 
   //true is a high pulse
   //false is a low pulse
@@ -92,15 +92,15 @@ void main() {
     'a' : FlipFlopModule(['b']),
     'b' : FlipFlopModule(['c']),
     'c' : FlipFlopModule(['inv']),
-    'inv' : ConjunctionModule(['a']),
+    'inv' : ConjunctionModule(['a'], {'c':false}),
   };
 
   Map<String,Module> map = {
     'broadcaster' : BroadcastModule(['a']),
     'a' : FlipFlopModule(['inv','con']),
-    'inv' : ConjunctionModule(['b']),
+    'inv' : ConjunctionModule(['b'],{'a':false}),
     'b' : FlipFlopModule(['con']),
-    'con' : ConjunctionModule(['output']),
+    'con' : ConjunctionModule(['output'],{'a':false,'b':false}),
   };
 
 
@@ -116,19 +116,23 @@ void main() {
         continue;
       }
       Module currComponent = map[currInput.$1]!;
+      bool? pulse = currComponent.computeInput(currInput.$2,currInput.$3);
+      if (pulse == null) continue;
       for (String componentName in currComponent.names) {
-        bool? pulse = currComponent.computeInput(currInput.$2,currInput.$3);
-        if (pulse == null) continue;
-        print("$componentName,$pulse");
+        print("${currInput.$1} -->$pulse, $componentName,");
         inputList.add((componentName,pulse,currInput.$1));
       }
     }
+    print("________");
     bool isNotInitState = false;
     for (String key in map.keys) {
       Map<String,bool> states = map[key]!.states;
+      print(states);
       for (bool value in states.values) {
         isNotInitState = value;
+        if (value == true) break;
       }
+      if(isNotInitState) break;
     }
     if (!isNotInitState) {
       print(i);
