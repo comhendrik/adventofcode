@@ -1,3 +1,6 @@
+import 'package:path/path.dart' as p;
+import 'dart:io';
+
 abstract class Module {
   bool? computeInput(bool input, String componentName);
   List<String> get names;
@@ -85,9 +88,36 @@ class BroadcastModule implements Module {
   List<String> get names => _names;
 }
 
-void main() {
+void main() async {
+  var filePath = p.join(Directory.current.path, '2023/20/twenty_input.txt');
+  Map<String,Module> map = {};
+  File file = File(filePath);
+  var fileContent = await file.readAsLines();
+  for (String line in fileContent) {
+    final data = line.split(' -> ');
+    if (data[0].contains('&')) {
+      List<String> ascended = data[1].split(', ');
+      final name = data[0].substring(1,data[0].length);
+      map[name] = ConjunctionModule(ascended, {'c':false});
+      //conjunction module
+    } else if (data[0].contains('%')) {
+      //flip flop module
+      List<String> ascended = data[1].split(', ');
+      final name = data[0].substring(1,data[0].length);
 
-  Map<String,Module> _ = {
+      map[name] = FlipFlopModule(ascended);
+    } else {
+      List<String> ascended = data[1].split(', ');
+      print(ascended.length);
+      map['broadcaster'] = BroadcastModule(ascended);
+    }
+  }
+
+  //TODO: Load something for a conjunction module
+
+
+
+  Map<String,Module> _fasdf = {
     'broadcaster' : BroadcastModule(['a','b','c']),
     'a' : FlipFlopModule(['b']),
     'b' : FlipFlopModule(['c']),
@@ -95,15 +125,13 @@ void main() {
     'inv' : ConjunctionModule(['a'], {'c':false}),
   };
 
-  Map<String,Module> map = {
+  Map<String,Module> _ = {
     'broadcaster' : BroadcastModule(['a']),
     'a' : FlipFlopModule(['inv','con']),
     'inv' : ConjunctionModule(['b'],{'a':false}),
     'b' : FlipFlopModule(['con']),
     'con' : ConjunctionModule(['output'],{'a':false,'b':false}),
   };
-
-
   int i = 0;
   int countHighPulse = 0;
   int countLowPulse = 0;
