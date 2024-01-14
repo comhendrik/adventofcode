@@ -46,12 +46,12 @@ class Day2 {
 
             int sum = 0;
             int sumAdder = 1;
-            for (int j=0; j<games.size(); j++) {
+            for (ArrayList<HashMap<String, Integer>> game : games) {
                 boolean addToSum = true;
-                for (int y=0; y<games.get(j).size(); y++) {
-                    for (String key : games.get(j).get(y).keySet()) {
+                for (HashMap<String, Integer> map : game) {
+                    for (String key : map.keySet()) {
                         if (available.containsKey(key)) {
-                            if (available.get(key) < games.get(j).get(y).get(key)) {
+                            if (available.get(key) < map.get(key)) {
                                 addToSum = false;
                             }
                         } else {
@@ -61,6 +61,30 @@ class Day2 {
                 }
                 if (addToSum) sum += sumAdder;
                 sumAdder++;
+            }
+            System.out.println(sum);
+
+            System.out.println("part two:");
+            HashMap<String, Integer> minPoints = new HashMap<String, Integer>(){{
+                put("red", 0);
+                put("green", 0);
+                put("blue", 0);
+            }};
+            sum = 0;
+            for(ArrayList<HashMap<String, Integer>> game : games) {
+                minPoints = new HashMap<String, Integer>(){{
+                    put("red", 0);
+                    put("green", 0);
+                    put("blue", 0);
+                }};
+                for(HashMap<String, Integer> map : game) {
+                    for (String key : map.keySet()) {
+                        if (minPoints.get(key) < map.get(key)) {
+                            minPoints.put(key, map.get(key));
+                        }
+                    }
+                }
+                sum += minPoints.get("red") * minPoints.get("green") * minPoints.get("blue");
             }
             System.out.println(sum);
         } catch (IOException e) {
