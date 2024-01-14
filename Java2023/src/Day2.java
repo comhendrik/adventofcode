@@ -8,7 +8,7 @@ import java.util.HashMap;
 class Day2 {
     public static void main(String[] args) {
         ArrayList<ArrayList<HashMap<String, Integer>>> games = new ArrayList<>();
-        final String path = "Java2023/inputs/t_day_2.txt";
+        final String path = "Java2023/inputs/day_2.txt";
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             String line;
             int i = 0;
@@ -19,7 +19,7 @@ class Day2 {
                 ArrayList<String> split = new ArrayList<>(Arrays.asList(line.split("\\s+")));
 
                 for (int j=2; j<split.size(); j++) {
-                    String key = "";
+                    String key;
                     if (split.get(j).matches("\\d+")) { //check if string is digit
                         if (j+1 == split.size() - 1) {
 
@@ -37,7 +37,32 @@ class Day2 {
                 i++;
             }
 
-            System.out.println(games);
+            HashMap<String, Integer> available = new HashMap<>();
+            available.put("red",12);
+            available.put("green",13);
+            available.put("blue", 14);
+
+            System.out.println("Part one:");
+
+            int sum = 0;
+            int sumAdder = 1;
+            for (int j=0; j<games.size(); j++) {
+                boolean addToSum = true;
+                for (int y=0; y<games.get(j).size(); y++) {
+                    for (String key : games.get(j).get(y).keySet()) {
+                        if (available.containsKey(key)) {
+                            if (available.get(key) < games.get(j).get(y).get(key)) {
+                                addToSum = false;
+                            }
+                        } else {
+                            addToSum = true;
+                        }
+                    }
+                }
+                if (addToSum) sum += sumAdder;
+                sumAdder++;
+            }
+            System.out.println(sum);
         } catch (IOException e) {
             System.out.println(e.getLocalizedMessage());
         }
