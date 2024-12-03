@@ -1,6 +1,6 @@
 cave = set()
 
-for line in open('2022/14/input.txt'):
+for line in open('2022/14/input.txt.txt'):
     coords = []
 
     for str_coord in line.split(" -> "):

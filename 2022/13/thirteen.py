@@ -1,4 +1,4 @@
-data = open("2022/13/input.txt", 'r')
+data = open("2022/13/input.txt.txt", 'r')
 packets = data.read().strip().split("\n\n")
 
 

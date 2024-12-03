@@ -1,6 +1,6 @@
 elves = []
 elv = 0
-for line in open('2022/1/input.txt'):
+for line in open('2022/1/input.txt.txt'):
     if line.strip():
         elv += int(line)
     else: 

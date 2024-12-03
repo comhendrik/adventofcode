@@ -46,7 +46,7 @@ class ConjunctionModule implements Module{
   //true is a high pulse
   //false is a low pulse
   @override
-  //input needs to be a value from a list and if it contains false or not
+  //input.txt needs to be a value from a list and if it contains false or not
   bool computeInput(bool input, String componentName) {
     _states[componentName] = input;
     if (_states.containsValue(false)) {

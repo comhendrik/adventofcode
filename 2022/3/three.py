@@ -54,7 +54,7 @@ point_for_char = {
 }
 
 backpacks = []
-for line in open('2022/3/input.txt'):
+for line in open('2022/3/input.txt.txt'):
     full_string = line.strip()
     first_compartment = full_string[:len(full_string)//2]
     second_compartment = full_string[len(full_string)//2:]
@@ -82,7 +82,7 @@ i = 1
 
 index_of_groups = 0
 
-for line in open('2022/3/input.txt'):
+for line in open('2022/3/input.txt.txt'):
     if i == 4: 
         groups.append([])
         index_of_groups += 1

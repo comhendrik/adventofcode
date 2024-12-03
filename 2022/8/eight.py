@@ -1,4 +1,4 @@
-data = open("2022/8/input.txt", 'r')
+data = open("2022/8/input.txt.txt", 'r')
 lines = data.read().strip().split()
 
 grid = [list(map(int, list(line))) for line in lines]

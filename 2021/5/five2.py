@@ -14,7 +14,7 @@ def sign(x):
 
 def parse_line(line):
     """
-    Parse a line in the input
+    Parse a line in the input.txt
     """
     start, _, end = line.split(" ")
     start = [int(i) for i in start.split(",")]

@@ -1,7 +1,7 @@
 sum_of_fully_containment = 0
 sum_of_not_overlapping = 0
 line_counter = 0
-for line in open('2022/4/input.txt'):
+for line in open('2022/4/input.txt.txt'):
     line_counter += 1
     numbers = line.strip()
     parts = numbers.split(',')

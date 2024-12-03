@@ -12,7 +12,7 @@ def snafu_to_int(number):
     return calculation
 
 snafu_numbers = []
-for line in open('2022/25/input.txt'):
+for line in open('2022/25/input.txt.txt'):
     snafu_numbers.append(line.strip())
 
 sum = 0

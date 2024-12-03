@@ -27,7 +27,7 @@ monkeys = []
 #get data from monkeys into array of objects
 i = -1
 
-for line in open('2022/11/input.txt'):
+for line in open('2022/11/input.txt.txt'):
     line = line.strip().split()
     if len(line) == 0:
         continue
@@ -37,7 +37,7 @@ for line in open('2022/11/input.txt'):
         continue
     elif line[0] == 'Starting':
         for j in range (2,len(line)):
-            number = line[j][0] + line[j][1] #Just need two digits numbers because input doesnt uses three digit numbers
+            number = line[j][0] + line[j][1] #Just need two digits numbers because input.txt doesnt uses three digit numbers
             monkeys[i].items.append(int(number))
     elif line[0] == 'Operation:':
         monkeys[i].operation = [line[3],line[5], line[4]]

@@ -1,4 +1,4 @@
-data = open("2022/21/input.txt")
+data = open("2022/21/input.txt.txt")
 lines = data.read().strip().split("\n")
 
 
@@ -21,7 +21,7 @@ def solve(name):
     #return expression for the monkey
     return eval(f"{left}{parts[1]}{right}")
 
-#parsing the input into the dict
+#parsing the input.txt into the dict
 for line in lines:
     parts = line.split(" ")
 

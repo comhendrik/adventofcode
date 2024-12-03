@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-with open("2022/23/input.txt") as fin:
+with open("2022/23/input.txt.txt") as fin:
     grid = fin.read().strip().split("\n")
 
 

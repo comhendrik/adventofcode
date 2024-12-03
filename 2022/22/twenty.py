@@ -1,5 +1,5 @@
 grid = []
-for line in open('2022/22/input.txt'):
+for line in open('2022/22/input.txt.txt'):
     line = line.strip()
     grid.append([])
     for char in line:

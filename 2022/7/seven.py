@@ -18,7 +18,7 @@ directory = Dir('/', subdir=[], docs=[], prev=None)
 
 current = directory
 
-for line in open('2022/7/input.txt'):
+for line in open('2022/7/input.txt.txt'):
     command = line.strip().split(' ')
     if 'cd' in set(command):
         if command[2] == '..':

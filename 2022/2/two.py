@@ -68,7 +68,7 @@ def playGamePartTwo(elf: str, you: str):
             return 1 + 6
 scorePartOne = 0
 scorePartTwo = 0
-for line in open('2022/2/input.txt'):
+for line in open('2022/2/input.txt.txt'):
     elf, you = line.split(' ')
     scorePartOne += playGamePartOne(elf, you.strip())
     scorePartTwo += playGamePartTwo(elf,you.strip())

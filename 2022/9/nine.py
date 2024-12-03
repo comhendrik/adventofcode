@@ -1,4 +1,4 @@
-data = open("2022/9/input.txt")
+data = open("2022/9/input.txt.txt")
 data = data.read().strip().split("\n")
 
 

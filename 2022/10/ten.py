@@ -4,7 +4,7 @@ signal_strength = 0
 
 wanted_cycles = {20, 60, 100, 140, 180, 220}
 
-for line in open('2022/10/input.txt'):
+for line in open('2022/10/input.txt.txt'):
     line = line.strip()
     if line == 'noop':
         cycle += 1
@@ -32,7 +32,7 @@ sprite_pos = 1
 
 image = ""
 
-for line in open('2022/10/input.txt'):
+for line in open('2022/10/input.txt.txt'):
     line = line.strip()
     if line == 'noop':
         if sprite_pos - 1 <= drawing_pos <= sprite_pos + 1:

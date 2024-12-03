@@ -4,7 +4,7 @@ class Node:
         self.left = None
         self.right = None
 
-x = [Node(int(x)) for x in open('2022/20/input.txt')]
+x = [Node(int(x)) for x in open('2022/20/input.txt.txt')]
 
 for i in range(len(x)):
     x[i].right = x[(i + 1) % len(x)]
@@ -52,7 +52,7 @@ for _ in range(3):
 print("part one")
 print(ans)
 
-x = [Node(int(x) * 811589153) for x in open('2022/20/input.txt')]
+x = [Node(int(x) * 811589153) for x in open('2022/20/input.txt.txt')]
 
 for i in range(len(x)):
     x[i].right = x[(i + 1) % len(x)]

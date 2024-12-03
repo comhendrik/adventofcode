@@ -1,7 +1,7 @@
 from string import ascii_lowercase
 from heapq import heappop, heappush
 
-data = open("2022/12/input.txt", 'r')
+data = open("2022/12/input.txt.txt", 'r')
 lines = data.read().strip().split()
 
 grid = [list(map(str, list(line))) for line in lines]

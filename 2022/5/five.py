@@ -11,7 +11,7 @@ stacks = [
 ]
 rearrangement_step = [0,0,0]
 
-for line in open('2022/5/input.txt'):
+for line in open('2022/5/input.txt.txt'):
     stripped_line = line.strip()
     parts_of_line = stripped_line.split(' ')
     rearrangement_step[0] = int(parts_of_line[1])
@@ -38,7 +38,7 @@ stacks = [
     ['L','G','S','R','B','N','V','M']
 ]
 
-for line in open('2022/5/input.txt'):
+for line in open('2022/5/input.txt.txt'):
     stripped_line = line.strip()
     parts_of_line = stripped_line.split(' ')
     rearrangement_step[0] = int(parts_of_line[1])

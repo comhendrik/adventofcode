@@ -1,4 +1,4 @@
-data = open("2022/6/input.txt", 'r')
+data = open("2022/6/input.txt.txt", 'r')
 data = data.read().strip()
 i = 0
 while True:
